@@ -11,7 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import dmitry.com.auth.R;
@@ -55,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        showPublicRepos();
-        
+
     }
 
     @Override
@@ -86,7 +87,12 @@ public class MainActivity extends AppCompatActivity {
             accessTokenCall.enqueue(new Callback<AccessToken>() {
                 @Override
                 public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
+                    String token = response.body().getAccessToken();
+                    textView.setText(token);
                     Toast.makeText(MainActivity.this, "yay", Toast.LENGTH_SHORT).show();
+
+                    showRepos(token);
+
                 }
 
                 @Override
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(uri != null ? Objects.requireNonNull(uri).toString() : "кекккккккекеке");
     }
 
-    private void showPublicRepos() {
+    private void showRepos(String token) {
         // for repo
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
@@ -113,7 +119,10 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = builder.build();
 
         GitHubClient client = retrofit.create(GitHubClient.class);
-        Call<List<GitHubRepo>> call = client.reposForUser("AlwaysOnThePositive");
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "token " + token);
+        Call<List<GitHubRepo>> call = client.reposForUser("AlwaysOnThePositive", headers);
 
         call.enqueue(new Callback<List<GitHubRepo>>() {
             @Override
@@ -129,19 +138,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(LOG, "Стопнули активити");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(LOG, "ДЕСТРОЙ");
-    }
-
-
 }
 
