@@ -2,10 +2,8 @@ package dmitry.com.auth.ui;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,8 +26,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-
-    private String LOG = "MyLog";
 
     private String cliendId = "fcd97c7a329b55f7498d";
     private String clientSecret = "84e8d8db1caf8de9c62bc1c254bbedd65f402b41";
@@ -56,15 +52,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.d(LOG, "ОнРезуме у активити");
 
         Uri uri = getIntent().getData();
         if (uri != null && uri.toString().startsWith(redirectUri)) {
@@ -92,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "yay", Toast.LENGTH_SHORT).show();
 
                     showRepos(token);
-
                 }
 
                 @Override
@@ -101,11 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, uri.toString(), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "huc-huc", Toast.LENGTH_LONG).show();
         }
-
 
         textView.setText(uri != null ? Objects.requireNonNull(uri).toString() : "кекккккккекеке");
     }

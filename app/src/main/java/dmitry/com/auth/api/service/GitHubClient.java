@@ -24,11 +24,10 @@ public interface GitHubClient {
             @Field("code") String code
     );
 
-    // get repos (only public)
+    // get repos
     @GET("/users/{user}/repos")
     Call<List<GitHubRepo>>reposForUser(@Path("user") String user, @HeaderMap Map<String, String>
             headers);
 
-    // get repos (all)
 
 }
